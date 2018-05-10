@@ -1,0 +1,13 @@
+{"message":"API running successfully - port 3000","level":"info","timestamp":"2018-05-10 00:08:23"}
+{"message":"API running successfully - port 3000","level":"info","timestamp":"2018-05-10 00:09:57"}
+{"message":"MongoError: there are no users authenticated","level":"error","timestamp":"2018-05-10 00:10:37"}
+{"message":"::1 - - [10/May/2018:03:10:37 +0000] \"POST /auth/login HTTP/1.1\" 500 33\n","level":"error","timestamp":"2018-05-10 00:10:37"}
+{"message":"::1 - - [10/May/2018:03:10:45 +0000] \"POST /users HTTP/1.1\" 404 145\n","level":"error","timestamp":"2018-05-10 00:10:45"}
+{"message":"::1 - - [10/May/2018:03:10:50 +0000] \"GET /users HTTP/1.1\" 404 144\n","level":"error","timestamp":"2018-05-10 00:10:50"}
+{"message":"API running successfully - port 3000","level":"info","timestamp":"2018-05-10 00:11:12"}
+{"message":"::1 - - [10/May/2018:03:11:18 +0000] \"GET /users HTTP/1.1\" - -\n","level":"info","timestamp":"2018-05-10 00:11:18"}
+{"message":"API running successfully - port 3000","level":"info","timestamp":"2018-05-10 00:12:06"}
+{"message":"API running successfully - port 3000","level":"info","timestamp":"2018-05-10 00:12:32"}
+{"message":"API running successfully - port 3000","level":"info","timestamp":"2018-05-10 00:12:36"}
+{"message":"MongoError: there are no users authenticated","level":"error","timestamp":"2018-05-10 00:12:42"}
+{"message":"::1 - - [10/May/2018:03:12:42 +0000] \"GET /users HTTP/1.1\" 500 33\n","level":"error","timestamp":"2018-05-10 00:12:42"}
