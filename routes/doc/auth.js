@@ -1,10 +1,10 @@
 /**
- * @api {post} /brsos/api/auth/login logando no sistema
- * @apiGroup Autenticação
+ * @api {post} /auth/login logando no sistema
+ * @apiGroup Autenticacao
  * 
  * @apiParam {String} email Email
  * @apiParam {String} password Senha - '[a-zA-Z0-9]{8,30}'
- * @apiSuccessExample {json} Sucesso
+ * @apiSuccessExample {json} Sucess
  *    HTTP/1.1 200 OK
  *    "me": {
  *         "_id": 3asdsaqqe12edwqds,

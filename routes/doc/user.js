@@ -1,6 +1,6 @@
 /**
- * @api {get} /brsos/api/user/:id pegando json com as informações do usuário
- * @apiGroup Usuário
+ * @api {get} /user/:id get info usuário
+ * @apiGroup Usuario
  *
  * @apiHeader Authentication {String} Token para autorização
  * @apiHeaderExample {json} Header
@@ -48,8 +48,8 @@
  */  
 
 /**
- * @api {get} /brsos/api/users/ get json with users information
- * @apiGroup Usuário
+ * @api {get} /users/ get json com os usuários
+ * @apiGroup Usuario
  *
  * @apiHeader Authentication {String} Token para autorização
  * @apiHeaderExample {json} Header
@@ -86,8 +86,8 @@
  */  
 
 /**
- * @api {post} /brsos/api/user/register adicionando usuário no banco de dados
- * @apiGroup Usuário
+ * @api {post} /user/register adicionando usuário
+ * @apiGroup Usuario
  * 
  * @apiparam {String} name nome do usuário
  * @apiparam {String} email e-mail do usuário
@@ -127,8 +127,8 @@
  */
 
  /**
- * @api {put} /brsos/api/user/update Alterando um usuário no banco de dados
- * @apiGroup Usuário
+ * @api {put} /user/update Alterando um usuário
+ * @apiGroup Usuario
  *
  * @apiHeader Authentication {String} Token para autorização
  * @apiHeaderExample {json} Header
@@ -186,8 +186,8 @@
  */
 
 /**
- * @api {delete} /brsos/api/user/delete/:id deletando um usuário no banco de dados
- * @apiGroup Usuário
+ * @api {delete} /user/delete/:id deletando um usuário
+ * @apiGroup Usuario
  *
  * @apiHeader Authentication {String} Token para autorização
  * @apiHeaderExample {json} Header
