@@ -1,31 +1,45 @@
 import bcrypt from 'bcrypt-nodejs'
 import jwt from 'jsonwebtoken'
 
-import logger from '../_config/logger'
+import UserModel from './../models/UserModel'
+import logger from './../_config/logger'
+import environment from './../_config/environment'
 
-module.exports = app => {
+const _isPassword = (user, password) => {
+    return new Promise((resolve, reject) => {
+        if(bcrypt.compareSync(password, user.password)) resolve();
+        else reject({errors: [{
+                field: ['password'],
+                messages: ['Senha incorreta!']
+            }]
+        })
+    });
+}
+
+const _generateToken = (user) => {
+    const ONE_WEEK = 60 * 60 * 24 * 7;
+    return jwt.sign({user}, environment.authentication.jwtSecret, {
+        expiresIn: ONE_WEEK
+    })
+}
+
+export class AuthController {
     
-    let collection
-    const AuthController = function(){
-        collection = app.models.UserModel
-    }
-
-    AuthController.prototype.login = function(req, res){
+    login = function(req, res) {
         let {email,password} = req.body;
 
-        collection.findOne({ email, status: true })
+        UserModel.findOne({ email, status: true })
             .then( user => {
                 if(user != null) {
-                    this._isPassword(user, password)
+                    _isPassword(user, password)
                         .catch(error => {
-                            logger.error(`${error.name}: ${error.message}`)
-                            res.status(500).send({ error: "Erro de servidor interno" })
+                            res.status(401).send(error)
                         })
                         .then( () => {
                             user.password = null
                             res.status(202).send({
                                 me: user, 
-                                token: this._generateToken(user), 
+                                token: _generateToken(user), 
                                 messsage: 'Autorizado com sucesso'
                             })
                         })                  
@@ -49,24 +63,4 @@ module.exports = app => {
             })
     }
 
-    //comparando senhas criptografadas
-    AuthController.prototype._isPassword = function(user, password){
-        return new Promise((resolve, reject) => {
-            if(bcrypt.compareSync(password, user.password)) resolve();
-            else reject({errors: [{
-                    field: ['password'],
-                    messages: ['Senha incorreta!']
-                }]
-            })
-        });
-    }
-
-    AuthController.prototype._generateToken = function(user){
-        const ONE_WEEK = 60 * 60 * 24 * 7;
-        return jwt.sign({user}, app._config.environment.authentication.jwtSecret, {
-            expiresIn: ONE_WEEK
-        })
-    }
-
-    return AuthController;
 }

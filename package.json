@@ -4,10 +4,11 @@
   "description": "API ...",
   "main": "main.js",
   "scripts": {
-    "dev": "nodemon --inspect main.js --exec babel-node --presets es2015,stage-2",
+    "dev": "nodemon --inspect main.js --exec babel-node",
     "start": "npm run docs && npm run clusters",
     "clusters": "NODE_ENV=production babel-node main.js",
-    "docs": "apidoc -i routes/doc -o public/doc"
+    "docs": "apidoc -i routes/doc -o public/doc",
+    "test": "jest --logHeapUsage --coverage"
   },
   "apidoc": {
     "name": "Documentação da API ...",
@@ -16,6 +17,7 @@
     }
   },
   "dependencies": {
+    "apidoc": "^0.15.1",
     "babel-cli": "^6.26.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.2",
@@ -33,9 +35,23 @@
     "passport-jwt": "^3.0.0",
     "url": "^0.11.0",
     "winston": "^3.0.0-rc3",
-    "apidoc": "^0.15.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-jest": "^22.4.3",
+    "jest": "^22.4.3",
+    "jest-cli": "^22.4.3",
+    "regenerator-runtime": "^0.11.1",
+    "supertest": "^3.0.0"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "coverageReporters": [
+      "lcov"
+    ],
+    "coverageDirectory": "./__test__/resultado"
+  }
 }

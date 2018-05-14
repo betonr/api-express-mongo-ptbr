@@ -1,18 +1,17 @@
 import passport from 'passport';
 import {Strategy, ExtractJwt} from 'passport-jwt';
 
-module.exports = app => {
+import UserModel from './../models/UserModel'
 
-    const config = app._config.environment.authentication;
-    const userModel = new app.models.UserModel;
+module.exports = (app, environment) => {
 
     let params = {
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-        secretOrKey: config.jwtSecret
+        secretOrKey: environment.authentication.jwtSecret
     }
 
     const strategy = new Strategy(params, (jwtPayload, done) => {
-        userModel.findOne({_id: jwtPayload.user.id})
+        UserModel.findOne({_id: jwtPayload.user.id})
             .then( user => done(null, {
                 _id: user._id,
                 email: user.email,

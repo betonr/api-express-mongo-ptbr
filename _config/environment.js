@@ -1,9 +1,9 @@
-module.exports = {
+const environment = {
   name: process.env.NAME || 'API',
   pathBase: process.env.PATHBASE || '',
   port: process.env.PORT || 3000,
   db: {
-    database: process.env.DB_NAME || 'test',
+    database: process.env.DB_NAME || 'api-dev',
     user: process.env.DB_USER || 'user',
     password: process.env.DB_PASS || 'test',
     options: {
@@ -17,3 +17,5 @@ module.exports = {
     jwtSession: {session: false}
   }
 }
+
+export default environment;

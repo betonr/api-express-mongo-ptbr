@@ -1,14 +1,14 @@
 import validate from 'express-validation'
-import bodyParser from 'body-parser'
 
-module.exports = app => {
+import policiesAuth from './../policies/auth'
+import { AuthController } from './../controllers/AuthController'
 
-    const Auth = new app.controllers.AuthController
+module.exports = (app, environment) => {
 
-    const path = app._config.environment.pathBase
+    const Auth = new AuthController()
 
-    app.post(path+"/auth/login",
-        validate(app.policies.auth.login), 
+    app.post(environment.pathBase+"/auth/login",
+        validate(policiesAuth.login), 
         Auth.login);  
-    
+
 }

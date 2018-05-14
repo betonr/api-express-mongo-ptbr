@@ -1,19 +1,22 @@
 import bcrypt from 'bcrypt-nodejs';
 
-import logger from '../_config/logger'
+import UserModel from './../models/UserModel'
+import logger from './../_config/logger'
 
-module.exports = (app) => {
+const _hashPassword = function(password){
+    let salt = bcrypt.genSaltSync(9);
+    let hash = bcrypt.hashSync(password, salt);
+
+    return hash;
+}
+
+export class UserController {
     
-    let collection;
-    const UserController = function(){
-        collection = app.models.UserModel
-    }
-
-    UserController.prototype.users = function(req, res){
+    users(req, res){
         let id = req.params.id ? req.params.id : false;
 
         if(id) {
-            collection.findOne({_id: id})
+            UserModel.findOne({_id: id})
                 .then( (user) => {
                     user.password = null;
                     res.send({user})
@@ -27,7 +30,7 @@ module.exports = (app) => {
             );
         }
         else{
-            collection.find()
+            UserModel.find()
                 .then( users_full => {
                     let users = users_full.map(user => {
                         user.password = null;
@@ -42,13 +45,13 @@ module.exports = (app) => {
         }
     }
 
-    UserController.prototype.register = function(req, res){
+    register(req, res){
         let user = req.body;
         let date = new Date();
         let dateNow = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
         user = { ...user, registration: dateNow, lastupdate: dateNow};
 
-        collection.findOne({email: user.email})
+        UserModel.findOne({email: user.email})
             .then( user => {
                 res.status(409).send({
                     errors: [{ 
@@ -58,10 +61,10 @@ module.exports = (app) => {
                 })
             })
             .catch( () => {
-                let password = this.hashPassword(user.password)
+                let password = _hashPassword(user.password)
                 user = {...user, password}
 
-                let insert = new collection(user)
+                let insert = new UserModel(user)
                 insert.save()
                     .then( result => res.status(201).send({ 'id': result.id }) )
                     .catch( error => {
@@ -71,16 +74,16 @@ module.exports = (app) => {
             });
     }
 
-    UserController.prototype.update = function(req, res){
+    update(req, res){
         let user = req.body;
 
-        collection.findOne({_id: user.id})
+        UserModel.findOne({_id: user.id})
             .then( () => {
                 let id = user.id;
                 delete user.id;
 
                 if(user.password) {
-                    let password = this.hashPassword(user.password);
+                    let password = _hashPassword(user.password);
                     user = {...user, password}; 
                 }      
 
@@ -88,7 +91,7 @@ module.exports = (app) => {
                 let dateNow = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;  
                 user = {...user, lastupdate: dateNow};
 
-                collection.findOneAndUpdate({ _id: id }, user)
+                UserModel.findOneAndUpdate({ _id: id }, user)
                     .then( () => res.status(202).send({success: true}) )
                     .catch( error => {
                         logger.error(`${error.name}: ${error.message}`)
@@ -104,12 +107,12 @@ module.exports = (app) => {
             }) );
     }
 
-    UserController.prototype.delete = function(req, res){
+    delete(req, res){
         let id = req.params.id;
         
-        collection.findOne({_id: id})
+        UserModel.findOne({_id: id})
             .then( () => {
-                collection.find({ _id: id }).remove()
+                UserModel.find({ _id: id }).remove()
                     .then( () => res.status(202).send({success: true}) )
                     .catch( error => {
                         logger.error(`${error.name}: ${error.message}`)
@@ -124,13 +127,4 @@ module.exports = (app) => {
                 }]
             }) );
     }
-
-    UserController.prototype.hashPassword = function(password){
-        let salt = bcrypt.genSaltSync(9);
-        let hash = bcrypt.hashSync(password, salt);
-
-        return hash;
-    }
-
-    return UserController;
 }

@@ -1,9 +1,7 @@
-module.exports = app => {
+module.exports = (app, environment) => {
 
-    const path = app._config.environment.pathBase
-
-    app.get(path+"/", (req, res) => {
-        res.status(200).json({ status: `${app._config.environment.name} - RODANDO COM SUCESSO`});
-    });
+    require('./status')(app, environment)
+    require('./auth')(app, environment)
+    require('./user')(app, environment)
 
 }

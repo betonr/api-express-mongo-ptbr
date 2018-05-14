@@ -1,31 +1,33 @@
 import validate from 'express-validation';
 
-module.exports = app => {
+import policiesUser from './../policies/user'
+import policiesAuth from './../policies/auth'
+import { UserController } from './../controllers/UserController'
 
-    const User = new app.controllers.UserController
+module.exports = (app, environment) => {
 
-    const path = app._config.environment.pathBase
+    const User = new UserController()
 
-    app.get(path+"/user/:id",
-        validate(app.policies.user.select),
+    app.get(environment.pathBase+"/user/:id",
+        validate(policiesUser.select),
         User.users)
-        .get(path+"/users/",
+        .get(environment.pathBase+"/users/",
         User.users);
 
-    app.post(path+"/user/register",
-        validate(app.policies.user.register),
+    app.post(environment.pathBase+"/user/register",
+        validate(policiesUser.register),
         User.register);
 
-    app.put(path+"/user/update",
-        app.policies.auth.authentication,
-        app.policies.auth.isAdmin,
-        validate(app.policies.user.update),
+    app.put(environment.pathBase+"/user/update",
+        policiesAuth.authentication,
+        policiesAuth.isAdmin,
+        validate(policiesUser.update),
         User.update);
 
-    app.delete(path+"/user/delete/:id",
-        app.policies.auth.authentication,
-        app.policies.auth.isAdmin,
-        validate(app.policies.user.delete),
+    app.delete(environment.pathBase+"/user/delete/:id",
+        policiesAuth.authentication,
+        policiesAuth.isAdmin,
+        validate(policiesUser.delete),
         User.delete);
 
 }
