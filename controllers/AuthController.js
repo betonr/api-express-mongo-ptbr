@@ -25,7 +25,7 @@ const _generateToken = (user) => {
 
 export class AuthController {
     
-    login = function(req, res) {
+    login(req, res) {
         let {email,password} = req.body;
 
         UserModel.findOne({ email, status: true })
@@ -54,7 +54,7 @@ export class AuthController {
                             }
                         ]                   
                     }
-                    res.status(401).send({ error: response })
+                    res.status(401).send({ errors: response.errors })
                 }
                 
             }).catch( err => {

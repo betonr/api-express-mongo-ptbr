@@ -32,7 +32,7 @@ export class Server {
         return new Promise( (resolve, reject) => {
             try {
                 this.app.use(morgan("common", {
-                    skip: (req, res) => res.statusCode >= 400,
+                    skip: (req, res) => res.statusCode >= 400 || process.env.NODE_ENV == 'test',
                     stream: {
                         write: (msg) => {
                         logger.info(msg)
@@ -41,7 +41,7 @@ export class Server {
                 }))
             
                 this.app.use(morgan("common", {
-                    skip: (req, res) => res.statusCode < 400,
+                    skip: (req, res) => res.statusCode < 400 || process.env.NODE_ENV == 'test',
                     stream: {
                         write: (msg) => {
                         logger.error(msg)
