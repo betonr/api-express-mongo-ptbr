@@ -81,3 +81,44 @@
 {"message":"::ffff:127.0.0.1 - - [14/May/2018:18:50:47 +0000] \"GET / HTTP/1.1\" 200 38\n","level":"info","timestamp":"2018-05-14 15:50:47"}
 {"message":"::ffff:127.0.0.1 - - [14/May/2018:19:14:57 +0000] \"POST /auth/login HTTP/1.1\" 401 92\n","level":"error","timestamp":"2018-05-14 16:14:57"}
 {"message":"::ffff:127.0.0.1 - - [14/May/2018:19:14:57 +0000] \"GET / HTTP/1.1\" 200 38\n","level":"info","timestamp":"2018-05-14 16:14:57"}
+{"message":"API rodando com sucesso - porta 3000","level":"info","timestamp":"2018-05-14 18:28:11"}
+{"message":"API rodando com sucesso - porta 3000","level":"info","timestamp":"2018-05-14 18:29:33"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:29:44 +0000] \"POST /auth/login HTTP/1.1\" 401 92\n","level":"error","timestamp":"2018-05-14 18:29:44"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:29:44 +0000] \"GET / HTTP/1.1\" 200 38\n","level":"info","timestamp":"2018-05-14 18:29:44"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:29:44 +0000] \"GET /users HTTP/1.1\" 200 12\n","level":"info","timestamp":"2018-05-14 18:29:44"}
+{"message":"API rodando com sucesso - porta 3000","level":"info","timestamp":"2018-05-14 18:30:12"}
+{"message":"::1 - - [14/May/2018:21:30:12 +0000] \"GET /user HTTP/1.1\" 404 143\n","level":"error","timestamp":"2018-05-14 18:30:12"}
+{"message":"::1 - - [14/May/2018:21:30:13 +0000] \"GET /user HTTP/1.1\" 404 143\n","level":"error","timestamp":"2018-05-14 18:30:13"}
+{"message":"::1 - - [14/May/2018:21:30:13 +0000] \"GET /user HTTP/1.1\" 404 143\n","level":"error","timestamp":"2018-05-14 18:30:13"}
+{"message":"::1 - - [14/May/2018:21:30:14 +0000] \"GET /user HTTP/1.1\" 404 143\n","level":"error","timestamp":"2018-05-14 18:30:14"}
+{"message":"::1 - - [14/May/2018:21:30:16 +0000] \"GET /users HTTP/1.1\" 200 237\n","level":"info","timestamp":"2018-05-14 18:30:16"}
+{"message":"::1 - - [14/May/2018:21:30:37 +0000] \"DELETE /user/delete/5af9d25e9bede6727de0d5be HTTP/1.1\" 403 63\n","level":"error","timestamp":"2018-05-14 18:30:37"}
+{"message":"API rodando com sucesso - porta 3000","level":"info","timestamp":"2018-05-14 18:30:52"}
+{"message":"API rodando com sucesso - porta 3000","level":"info","timestamp":"2018-05-14 18:31:07"}
+{"message":"API rodando com sucesso - porta 3000","level":"info","timestamp":"2018-05-14 18:31:13"}
+{"message":"API rodando com sucesso - porta 3000","level":"info","timestamp":"2018-05-14 18:31:25"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:31:43 +0000] \"POST /auth/login HTTP/1.1\" 401 92\n","level":"error","timestamp":"2018-05-14 18:31:43"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:31:44 +0000] \"GET /users HTTP/1.1\" 200 12\n","level":"info","timestamp":"2018-05-14 18:31:44"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:31:44 +0000] \"GET / HTTP/1.1\" 200 38\n","level":"info","timestamp":"2018-05-14 18:31:44"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:32:02 +0000] \"GET /users HTTP/1.1\" 200 12\n","level":"info","timestamp":"2018-05-14 18:32:02"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:32:02 +0000] \"POST /auth/login HTTP/1.1\" 401 92\n","level":"error","timestamp":"2018-05-14 18:32:02"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:32:02 +0000] \"GET / HTTP/1.1\" 200 38\n","level":"info","timestamp":"2018-05-14 18:32:02"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:36:48 +0000] \"GET /user/register HTTP/1.1\" 404 68\n","level":"error","timestamp":"2018-05-14 18:36:48"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:36:48 +0000] \"GET /users HTTP/1.1\" 200 12\n","level":"info","timestamp":"2018-05-14 18:36:48"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:36:48 +0000] \"POST /auth/login HTTP/1.1\" 401 92\n","level":"error","timestamp":"2018-05-14 18:36:48"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:36:48 +0000] \"GET / HTTP/1.1\" 200 38\n","level":"info","timestamp":"2018-05-14 18:36:48"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:37:27 +0000] \"POST /user/register HTTP/1.1\" 201 33\n","level":"info","timestamp":"2018-05-14 18:37:27"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:37:27 +0000] \"GET /users HTTP/1.1\" 200 238\n","level":"info","timestamp":"2018-05-14 18:37:27"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:37:28 +0000] \"POST /auth/login HTTP/1.1\" 401 92\n","level":"error","timestamp":"2018-05-14 18:37:28"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:37:28 +0000] \"GET / HTTP/1.1\" 200 38\n","level":"info","timestamp":"2018-05-14 18:37:28"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:39:25 +0000] \"POST /user/register HTTP/1.1\" 201 33\n","level":"info","timestamp":"2018-05-14 18:39:25"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:39:25 +0000] \"POST /user/register HTTP/1.1\" 409 90\n","level":"error","timestamp":"2018-05-14 18:39:25"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:39:25 +0000] \"GET /users HTTP/1.1\" 200 238\n","level":"info","timestamp":"2018-05-14 18:39:25"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:39:25 +0000] \"GET / HTTP/1.1\" 200 38\n","level":"info","timestamp":"2018-05-14 18:39:25"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:39:25 +0000] \"POST /auth/login HTTP/1.1\" 401 92\n","level":"error","timestamp":"2018-05-14 18:39:25"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:41:32 +0000] \"POST /user/register HTTP/1.1\" 201 33\n","level":"info","timestamp":"2018-05-14 18:41:32"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:41:32 +0000] \"POST /user/register HTTP/1.1\" 409 90\n","level":"error","timestamp":"2018-05-14 18:41:32"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:41:32 +0000] \"POST /user/register HTTP/1.1\" 400 258\n","level":"error","timestamp":"2018-05-14 18:41:32"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:41:32 +0000] \"GET /users HTTP/1.1\" 200 238\n","level":"info","timestamp":"2018-05-14 18:41:32"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:41:32 +0000] \"POST /auth/login HTTP/1.1\" 401 92\n","level":"error","timestamp":"2018-05-14 18:41:32"}
+{"message":"::ffff:127.0.0.1 - - [14/May/2018:21:41:32 +0000] \"GET / HTTP/1.1\" 200 38\n","level":"info","timestamp":"2018-05-14 18:41:32"}

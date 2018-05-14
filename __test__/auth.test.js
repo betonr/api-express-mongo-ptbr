@@ -23,7 +23,7 @@ test('post /auth/login - not found', () => {
 //         .post('/auth/login')
 //         .send({
 //             email: 'admin@test.com.br',
-//             password: 'admintst235'
+//             password: 'admin235'
 //         })
 //         .then( response => {
 //             expect(response.status).toBe(401)

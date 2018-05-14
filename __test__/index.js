@@ -1,5 +1,4 @@
 import jestCli from 'jest-cli'
-import mongoose from 'mongoose'
 
 import { Server } from './../_server/index'
 import environment from './../_config/environment'

@@ -8,7 +8,7 @@
     "start": "npm run docs && npm run clusters",
     "clusters": "NODE_ENV=production babel-node main.js",
     "docs": "apidoc -i routes/doc -o public/doc",
-    "test": "babel-node __test__/index.js --logHeapUsage --coverage"
+    "test": "NODE_ENV=test babel-node __test__/index.js --logHeapUsage --coverage"
   },
   "apidoc": {
     "name": "Documentação da API ...",
