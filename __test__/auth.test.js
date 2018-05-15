@@ -22,11 +22,25 @@ test('post /auth/login - not found', () => {
 //     return request(address)
 //         .post('/auth/login')
 //         .send({
-//             email: 'admin@test.com.br',
-//             password: 'admin235'
+//             email: 'admin@tests.com.br',
+//             password: 'admins235'
 //         })
 //         .then( response => {
 //             expect(response.status).toBe(401)
 //             expect(response.body.errors[0].field).toEqual(['password'])
 //         }).catch(fail) 
 // })
+
+test('post /auth/login - success', () => {
+    return request(address)
+        .post('/auth/login')
+        .send({
+            email: 'admin@tests.com.br',
+            password: 'admintst235'
+        })
+        .then( response => {
+            expect(response.status).toBe(202)
+            expect(response.body.me).toBeInstanceOf(Object)
+            expect(response.body.token).toBeDefined()
+        }).catch(fail) 
+})

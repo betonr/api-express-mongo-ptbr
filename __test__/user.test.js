@@ -2,13 +2,24 @@ import 'jest'
 import request from 'supertest'
 
 import environment from './../_config/environment'
-import UserModel from './../models/UserModel'
 
 let address = global.address+environment.pathBase;
 
 let idUser;
+let token;
 
-describe('user control', () => {
+describe('user controller', () => {
+
+    beforeAll( () => request(address)
+            .post('/auth/login')
+            .send({
+                email: 'admin@tests.com.br',
+                password: 'admintst235'
+            })
+            .then( response => {
+                token = response.body.token
+            })
+        )
 
     test('post /user/register - register success', () => {
         return request(address)

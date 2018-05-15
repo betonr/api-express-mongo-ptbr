@@ -19,14 +19,14 @@ module.exports = (app, environment) => {
         User.register);
 
     app.put(environment.pathBase+"/user/update",
-        // policiesAuth.authentication,
-        // policiesAuth.isAdmin,
+        policiesAuth.authentication,
+        policiesAuth.isAdmin,
         validate(policiesUser.update),
         User.update);
 
     app.delete(environment.pathBase+"/user/delete/:id",
-        // policiesAuth.authentication,
-        // policiesAuth.isAdmin,
+        policiesAuth.authentication,
+        policiesAuth.isAdmin,
         validate(policiesUser.delete),
         User.delete);
 

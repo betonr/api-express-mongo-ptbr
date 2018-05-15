@@ -32,7 +32,7 @@ export class AuthController {
             .then( user => {
                 if(user != null) {
                     _isPassword(user, password)
-                        .catch(error => {
+                        .catch( error => {
                             res.status(401).send(error)
                         })
                         .then( () => {
