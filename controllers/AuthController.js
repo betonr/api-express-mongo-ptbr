@@ -25,42 +25,41 @@ const _generateToken = (user) => {
 
 export class AuthController {
     
-    login(req, res) {
-        let {email,password} = req.body;
+    login = async function(req) {
+        return new Promise( (resolve, reject) => {
+            let {email,password} = req.body;
 
-        UserModel.findOne({ email, status: true })
-            .then( user => {
-                if(user != null) {
-                    _isPassword(user, password)
-                        .catch( error => {
-                            res.status(401).send(error)
-                        })
-                        .then( () => {
-                            user.password = null
-                            res.status(202).send({
-                                me: user, 
-                                token: _generateToken(user), 
-                                messsage: 'Autorizado com sucesso'
-                            })
-                        })                  
-                
-                //USER - NOT FOUND OR INACTIVE
-                } else{
-                    let response = {
-                        errors: [
-                            {
-                                field: ['email','status'],
-                                messages: ['Usuário não encontrado ou inativo']
-                            }
-                        ]                   
+            UserModel.findOne({ email, status: true })
+                .then( user => {
+                    if(user != null) {
+                        _isPassword(user, password)
+                            .catch(error => reject({'error': error, status: 500}))
+                            .then( () => {
+                                user.password = null
+                                resolve({
+                                    me: user, 
+                                    token: _generateToken(user), 
+                                    messsage: 'Autorizado com sucesso'
+                                })
+                            })               
+                    
+                    //USER - NOT FOUND OR INACTIVE
+                    } else{
+                        let response = {
+                            errors: [
+                                {
+                                    field: ['email','status'],
+                                    messages: ['Usuário não encontrado ou inativo']
+                                }
+                            ]                 
+                        }
+                        reject({'error': response, status: 401})
                     }
-                    res.status(401).send({ errors: response.errors })
-                }
-                
-            }).catch( err => {
-                logger.error(`${err.name}: ${err.message}`)
-                res.status(500).send({ error: "Erro de servidor interno" })
-            })
+                    
+                }).catch( err => {
+                    reject({'error': err, status: 500})
+                })  
+        })
     }
 
 }
