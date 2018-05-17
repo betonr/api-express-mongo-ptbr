@@ -9,14 +9,8 @@ module.exports = (app, environment) => {
 
     app.post(environment.pathBase+"/auth/login",
         validate(policiesAuth.login), 
-        (req, res) => Auth.login(req)
+        (req, res) => Auth.login(req.body)
             .then(response => res.status(202).send(response) )
-            .catch( error => {
-                if(error.status < 500) res.status(error.status).send(error.error)
-                else {
-                    logger.error(`${error.error.name}: ${error.error.message}`)
-                    res.status(500).send({ error: "Erro interno no servidor" }) 
-                }
-            })
+            .catch( error => res.status(error.status).send({error: error.errors}) )
     );  
 }

@@ -1,3 +1,5 @@
+'use strict'
+
 import { Server } from './_server/index'
 import environment from './_config/environment'
 import logger from './_config/logger'

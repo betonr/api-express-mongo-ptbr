@@ -10,24 +10,35 @@ module.exports = (app, environment) => {
 
     app.get(environment.pathBase+"/user/:id",
         validate(policiesUser.select),
-        User.users)
-        .get(environment.pathBase+"/users/",
-        User.users);
+        (req, res) => User.users(req.params.id)
+            .then( response => res.status(200).send(response) )
+            .catch( error => res.status(error.status).send({error: error.errors}) ))
+
+    app.get(environment.pathBase+"/users/",
+        (req, res) => User.users(null)
+            .then( response => res.status(200).send(response) )
+            .catch( error => res.status(error.status).send({error: error.errors}) ))
 
     app.post(environment.pathBase+"/user/register",
         validate(policiesUser.register),
-        User.register);
+        (req, res) => User.register(req.body)
+            .then( response => res.status(201).send(response) )
+            .catch( error => res.status(error.status).send({error: error.errors}) ))
 
     app.put(environment.pathBase+"/user/update",
         policiesAuth.authentication,
         policiesAuth.isAdmin,
         validate(policiesUser.update),
-        User.update);
+        (req, res) => User.update(req.body)
+            .then( response => res.status(202).send(response) )
+            .catch( error => res.status(error.status).send({error: error.errors}) ))
 
     app.delete(environment.pathBase+"/user/delete/:id",
         policiesAuth.authentication,
         policiesAuth.isAdmin,
         validate(policiesUser.delete),
-        User.delete);
+        (req, res) => User.delete(req.params.id)
+            .then( response => res.status(202).send(response) )
+            .catch( error => res.status(error.status).send({error: error.errors}) ))
 
 }

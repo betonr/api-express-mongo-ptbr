@@ -25,15 +25,15 @@ const _generateToken = (user) => {
 
 export class AuthController {
     
-    login = async function(req) {
+    login = async function(infos) {
         return new Promise( (resolve, reject) => {
-            let {email,password} = req.body;
-
+            let {email, password} = infos
+            
             UserModel.findOne({ email, status: true })
                 .then( user => {
                     if(user != null) {
                         _isPassword(user, password)
-                            .catch(error => reject({'error': error, status: 500}))
+                            .catch(error => reject({'errors': error, status: 500}))
                             .then( () => {
                                 user.password = null
                                 resolve({
@@ -57,11 +57,12 @@ export class AuthController {
                                 }
                             ]                 
                         }
-                        reject({'error': response, status: 401})
+                        reject({'errors': response, status: 401})
                     }
                     
                 }).catch( err => {
-                    reject({'error': err, status: 500})
+                    logger.error(`${error.error.name}: ${error.error.message}`)
+                    reject({'errors': err, status: 500})
                 })  
         })
     }
