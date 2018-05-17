@@ -18,18 +18,18 @@ test('post /auth/login - not found', () => {
         }).catch(fail)
 })
 
-// test('post /auth/login - error password', () => {
-//     return request(address)
-//         .post('/auth/login')
-//         .send({
-//             email: 'admin@tests.com.br',
-//             password: 'admins235'
-//         })
-//         .then( response => {
-//             expect(response.status).toBe(401)
-//             expect(response.body.errors[0].field).toEqual(['password'])
-//         }).catch(fail) 
-// })
+test('post /auth/login - error password', () => {
+    return request(address)
+        .post('/auth/login')
+        .send({
+            email: 'admin@test.com.br',
+            password: 'passerro10'
+        })
+        .then( response => {
+            expect(response.status).toBe(401)
+            expect(response.body.errors[0].field).toEqual(['password'])
+        }).catch(fail) 
+})
 
 test('post /auth/login - success', () => {
     return request(address)

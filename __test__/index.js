@@ -16,16 +16,7 @@ const beforeAllTests = () => {
   server = new Server()
   return server.start()
             .then( () => UserModel.remove({}).exec() )
-            .then( () => request(address)
-              .post('/user/register')
-              .send({
-                  email: 'admin@tests.com.br',
-                  password: 'admintst235',
-                  name: 'admin',
-                  lastname: 'teste',
-                  level: 3
-              })
-            )
+            .then( () => true )
 }
 
 const afterAllTests = () => {

@@ -38,7 +38,11 @@ export class AuthController {
                                 user.password = null
                                 resolve({
                                     me: user, 
-                                    token: _generateToken(user), 
+                                    token: _generateToken({
+                                        _id: user._id,
+                                        email: user.email,
+                                        level: user.level
+                                    }), 
                                     messsage: 'Autorizado com sucesso'
                                 })
                             })               

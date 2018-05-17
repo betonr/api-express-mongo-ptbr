@@ -4,22 +4,13 @@ import request from 'supertest'
 import environment from './../_config/environment'
 
 let address = global.address+environment.pathBase;
+let token = global.token
 
 let idUser;
-let token;
 
 describe('user controller', () => {
 
-    beforeAll( () => request(address)
-            .post('/auth/login')
-            .send({
-                email: 'admin@tests.com.br',
-                password: 'admintst235'
-            })
-            .then( response => {
-                token = response.body.token
-            })
-        )
+    beforeAll( () => true)
 
     test('post /user/register - register success', () => {
         return request(address)

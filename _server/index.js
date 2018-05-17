@@ -6,6 +6,9 @@ import helmet from 'helmet'
 import http from 'http'
 import morgan from 'morgan'
 
+import https from 'https'
+import fs from 'fs'
+
 import logger from './../_config/logger'
 import environment from './../_config/environment'
 
@@ -72,9 +75,18 @@ export class Server {
 
     initServer() {
         return new Promise( (resolve, reject) => {
-            let server = http.createServer(this.app);
-            server.listen( environment.port, () =>  resolve() );
-            this.server = server
+            let server
+
+            if(environment.authentication.enableHTTPS) {
+                const credentials = {
+                    key: fs.readFileSync(environment.authentication.certificate, "utf8"),
+                    cert: fs.readFileSync(environment.authentication.certificate, "utf8")
+                }
+                server = https.createServer(credentials, this.app)
+            } else{
+                server = http.createServer(this.app);
+            }
+            server.listen( environment.port, () =>  resolve() )
 
             this.app.use(function(err, req, res, next){
                 res.status(400).json(err);
@@ -96,25 +108,3 @@ export class Server {
     }
 
 }
-
-/*
-import https from "https";
-import fs from "fs";
-
-module.exports = app => {
-  if (process.env.NODE_ENV !== "test") {
-    const credentials = {
-      key: fs.readFileSync("private.key", "utf8"),
-      cert: fs.readFileSync("certificate.pem", "utf8")
-    }
-    https.createServer(credentials, app)
-        .listen(app.libs.DSINFO.port, () => {
-            console.log(`EditData Pauliceia API running with success - port ${app.libs.DSINFO.port}`);
-        });
-  }
-
-  // error handler, required as of 0.3.0 
-  app.use(function(err, req, res, next){
-    res.status(400).json(err);
-  });
-}*/
