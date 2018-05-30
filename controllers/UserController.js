@@ -24,7 +24,7 @@ export class UserController {
                         status: 404,
                         errors: [{ 
                             field: ['id'],
-                            message: ['Usuário não encontrado']
+                            messages: ['Usuário não encontrado']
                         }]
                     })
                 )
@@ -61,7 +61,7 @@ export class UserController {
                         status: 409,
                         errors: [{ 
                             field: ['email'],
-                            message: [`E-mail (${user.email}) já está em uso`]
+                            messages: [`E-mail (${user.email}) já está em uso`]
                         }]
                     })
                 })
@@ -114,7 +114,7 @@ export class UserController {
                     status: 404,
                     errors: [{ 
                         field: ['id'],
-                        message: ['Usuário não encontrado']
+                        messages: ['Usuário não encontrado']
                     }]
                 }) )
         })
@@ -139,7 +139,7 @@ export class UserController {
                     status: 404,
                     errors: [{ 
                         field: ['id'],
-                        message: ['Usuário não encontrado']
+                        messages: ['Usuário não encontrado']
                     }]
                 }) )
         })
