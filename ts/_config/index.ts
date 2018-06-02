@@ -2,7 +2,7 @@ import * as express from 'express'
 import * as mongoose from 'mongoose'
 
 import * as bodyParser from 'body-parser'
-import * as cors from '~cors'
+import * as cors from 'cors'
 import * as helmet from 'helmet'
 import * as http from 'http'
 import * as morgan from 'morgan'
@@ -11,16 +11,21 @@ import * as fs from 'fs'
 
 import logger from './logger'
 import environment from './environment'
+import { ConnectionBase, Mongoose } from 'mongoose';
 
 export class Server {
 
-    app = express()
-    server = null
+    app: express.Express
+    server: any
+    constructor() {
+        this.app = express()
+        this.server = null
+    }
 
-    initDB() {
+    initDB(): Promise<Mongoose> {
         (<any>mongoose).Promise = global.Promise;
         
-        let cn;
+        let cn: string;
         if(process.env.NODE_ENV && process.env.NODE_ENV=="production"){
             cn = process.env.DB_URL ? process.env.DB_URL : 
                 `mongodb://${environment.db.user}:${environment.db.password}@${environment.db.options.host}:${environment.db.options.port}/${environment.db.database}`
@@ -31,7 +36,7 @@ export class Server {
         return mongoose.connect(cn)
     }
 
-    initConfig() {
+    initConfig(): Promise<any> {
         return new Promise( (resolve, reject) => {
             try {
                 this.app.use(morgan("common", {
@@ -73,8 +78,9 @@ export class Server {
         })
     }
 
-    initServer() {
+    initServer(): Promise<any> {
         return new Promise( (resolve, reject) => {
+
             if(environment.authentication.enableHTTPS) {
                 const credentials = {
                     key: fs.readFileSync(environment.authentication.certificate, "utf8"),
