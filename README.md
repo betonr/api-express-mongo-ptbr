@@ -15,5 +15,6 @@
 
 * clusters = um por CPU
 * logs = winston com morgan
-* teste = ...
+* teste = jest
 * validação = Joi
+* compile = typescript

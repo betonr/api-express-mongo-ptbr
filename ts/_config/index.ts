@@ -1,16 +1,16 @@
-import express from 'express'
-import mongoose from 'mongoose'
-import bodyParser from 'body-parser'
-import cors from 'cors'
-import helmet from 'helmet'
-import http from 'http'
-import morgan from 'morgan'
+import * as express from 'express'
+import * as mongoose from 'mongoose'
 
-import https from 'https'
-import fs from 'fs'
+import * as bodyParser from 'body-parser'
+import * as cors from '~cors'
+import * as helmet from 'helmet'
+import * as http from 'http'
+import * as morgan from 'morgan'
+import * as https from 'https'
+import * as fs from 'fs'
 
-import logger from './../_config/logger'
-import environment from './../_config/environment'
+import logger from './logger'
+import environment from './environment'
 
 export class Server {
 
@@ -18,8 +18,8 @@ export class Server {
     server = null
 
     initDB() {
-        mongoose.Promise = global.Promise;
-
+        (<any>mongoose).Promise = global.Promise;
+        
         let cn;
         if(process.env.NODE_ENV && process.env.NODE_ENV=="production"){
             cn = process.env.DB_URL ? process.env.DB_URL : 
@@ -65,7 +65,7 @@ export class Server {
 
                 require('../_config/passport')(this.app, environment)
 
-                resolve( require('../routes')(this.app, environment) )
+                resolve(require('../routes')(this.app, environment))
 
             } catch(error) {
                 reject(error)
@@ -75,18 +75,16 @@ export class Server {
 
     initServer() {
         return new Promise( (resolve, reject) => {
-            let server
-
             if(environment.authentication.enableHTTPS) {
                 const credentials = {
                     key: fs.readFileSync(environment.authentication.certificate, "utf8"),
                     cert: fs.readFileSync(environment.authentication.certificate, "utf8")
                 }
-                server = https.createServer(credentials, this.app)
+                this.server = https.createServer(credentials, this.app)
             } else{
-                server = http.createServer(this.app);
+                this.server = http.createServer(this.app);
             }
-            server.listen( environment.port, () =>  resolve() )
+            this.server.listen( environment.port, () =>  resolve() )
 
             this.app.use(function(err, req, res, next){
                 res.status(400).json(err);
@@ -95,7 +93,7 @@ export class Server {
         })
     }
 
-    start() {
+    start(): Promise<Server>{
         return this.initDB()
                 .then( () => this.initConfig()
                 .then( () => this.initServer()
