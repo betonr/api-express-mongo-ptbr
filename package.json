@@ -2,9 +2,10 @@
   "name": "api-express-mongo-pt-br",
   "version": "0.9.0",
   "description": "API ...",
-  "main": "main.ts",
+  "main": "main.js",
   "scripts": {
-    "start": "tsc",
+    "start": "node dist/main.js",
+    "build": "tsc",
     "docs": "apidoc -i routes/doc -o public/doc",
     "test": "NODE_ENV=test babel-node __test__/index.js --logHeapUsage"
   },
@@ -37,6 +38,8 @@
     "@types/helmet": "0.0.37",
     "@types/mongoose": "^5.0.15",
     "@types/morgan": "^1.7.35",
+    "@types/passport-jwt": "^3.0.1",
+    "@types/winston": "^2.3.9",
     "jest": "^22.4.3",
     "jest-cli": "^22.4.3",
     "regenerator-runtime": "^0.11.1",

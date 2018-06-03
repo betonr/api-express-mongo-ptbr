@@ -1,4 +1,4 @@
-const environment = {
+export const environment = {
   name: process.env.NAME || 'API',
   pathBase: process.env.PATHBASE || '',
   port: process.env.PORT || 3000,
@@ -20,5 +20,3 @@ const environment = {
     key: process.env.CERT_KEY_FILE || ''
   }
 }
-
-export default environment;

@@ -1,10 +1,18 @@
 {
     "compilerOptions": {
-        "target": "es6",
         "outDir": "dist",
+        "target": "es2015",
+        "module": "commonjs",
         "noEmitOnError": true
     },
     "include": [
         "ts/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "logs",
+        "__test__",
+        "public",
+        "dist"
     ]
 }

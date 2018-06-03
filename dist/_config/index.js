@@ -1,29 +1,36 @@
-import * as express from 'express';
-import * as mongoose from 'mongoose';
-import * as bodyParser from 'body-parser';
-import * as cors from 'cors';
-import * as helmet from 'helmet';
-import * as http from 'http';
-import * as morgan from 'morgan';
-import * as https from 'https';
-import * as fs from 'fs';
-import logger from './logger';
-import environment from './environment';
-export class Server {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express = require("express");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const helmet = require("helmet");
+const http = require("http");
+const morgan = require("morgan");
+const https = require("https");
+const fs = require("fs");
+const logger_1 = require("./logger");
+const environment_1 = require("./environment");
+const passport_1 = require("./passport");
+const index_1 = require("./../routes/index");
+class Server {
     constructor() {
         this.app = express();
         this.server = null;
+        this.logger = new logger_1.Logger().logs();
+        this.passport = new passport_1.Passport(this.app, environment_1.environment);
+        this.router = new index_1.Router(this.app, environment_1.environment);
     }
     initDB() {
         mongoose.Promise = global.Promise;
         let cn;
         if (process.env.NODE_ENV && process.env.NODE_ENV == "production") {
             cn = process.env.DB_URL ? process.env.DB_URL :
-                `mongodb://${environment.db.user}:${environment.db.password}@${environment.db.options.host}:${environment.db.options.port}/${environment.db.database}`;
+                `mongodb://${environment_1.environment.db.user}:${environment_1.environment.db.password}@${environment_1.environment.db.options.host}:${environment_1.environment.db.options.port}/${environment_1.environment.db.database}`;
         }
         else {
             cn = process.env.DB_URL ? process.env.DB_URL :
-                `mongodb://localhost:27017/${environment.db.database}`;
+                `mongodb://localhost:27017/${environment_1.environment.db.database}`;
         }
         return mongoose.connect(cn);
     }
@@ -34,7 +41,7 @@ export class Server {
                     skip: (req, res) => res.statusCode >= 400 || process.env.NODE_ENV == 'test',
                     stream: {
                         write: (msg) => {
-                            logger.info(msg);
+                            this.logger.info(msg);
                         }
                     }
                 }));
@@ -42,7 +49,7 @@ export class Server {
                     skip: (req, res) => res.statusCode < 400 || process.env.NODE_ENV == 'test',
                     stream: {
                         write: (msg) => {
-                            logger.error(msg);
+                            this.logger.error(msg);
                         }
                     }
                 }));
@@ -54,8 +61,9 @@ export class Server {
                     allowedHeaders: ["Content-Type", "Authorization"]
                 }));
                 this.app.use(helmet());
-                require('../_config/passport')(this.app, environment);
-                resolve(require('../routes')(this.app, environment));
+                this.passport.auth();
+                this.router.init();
+                resolve();
             }
             catch (error) {
                 reject(error);
@@ -64,17 +72,17 @@ export class Server {
     }
     initServer() {
         return new Promise((resolve, reject) => {
-            if (environment.authentication.enableHTTPS) {
+            if (environment_1.environment.authentication.enableHTTPS) {
                 const credentials = {
-                    key: fs.readFileSync(environment.authentication.certificate, "utf8"),
-                    cert: fs.readFileSync(environment.authentication.certificate, "utf8")
+                    key: fs.readFileSync(environment_1.environment.authentication.certificate, "utf8"),
+                    cert: fs.readFileSync(environment_1.environment.authentication.certificate, "utf8")
                 };
                 this.server = https.createServer(credentials, this.app);
             }
             else {
                 this.server = http.createServer(this.app);
             }
-            this.server.listen(environment.port, () => resolve());
+            this.server.listen(environment_1.environment.port, () => resolve());
             this.app.use(function (err, req, res, next) {
                 res.status(400).json(err);
                 reject(err);
@@ -83,12 +91,13 @@ export class Server {
     }
     start() {
         return this.initDB()
-            .then(() => this.initConfig()
-            .then(() => this.initServer()
-            .then(() => this)));
+            .then(_ => this.initConfig()
+            .then(_ => this.initServer()
+            .then(_ => this)));
     }
     shutdown() {
         return mongoose.disconnect()
             .then(() => this.server.close());
     }
 }
+exports.Server = Server;

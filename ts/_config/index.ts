@@ -9,21 +9,29 @@ import * as morgan from 'morgan'
 import * as https from 'https'
 import * as fs from 'fs'
 
-import logger from './logger'
-import environment from './environment'
-import { ConnectionBase, Mongoose } from 'mongoose';
+import { Logger } from './logger'
+import { environment } from './environment'
+import { Passport } from './passport';
+import { Router } from './../routes/index'
 
 export class Server {
 
     app: express.Express
     server: any
+    logger: any
+    passport: Passport
+    router: Router
+
     constructor() {
         this.app = express()
         this.server = null
+        this.logger = new Logger().logs()
+        this.passport = new Passport(this.app, environment)
+        this.router = new Router(this.app, environment)
     }
 
-    initDB(): Promise<Mongoose> {
-        (<any>mongoose).Promise = global.Promise;
+    initDB(): Promise<mongoose.Mongoose> {
+        (<any>mongoose).Promise = global.Promise
         
         let cn: string;
         if(process.env.NODE_ENV && process.env.NODE_ENV=="production"){
@@ -43,7 +51,7 @@ export class Server {
                     skip: (req, res) => res.statusCode >= 400 || process.env.NODE_ENV == 'test',
                     stream: {
                         write: (msg) => {
-                        logger.info(msg)
+                            this.logger.info(msg)
                         }
                     }
                 }))
@@ -52,25 +60,24 @@ export class Server {
                     skip: (req, res) => res.statusCode < 400 || process.env.NODE_ENV == 'test',
                     stream: {
                         write: (msg) => {
-                        logger.error(msg)
+                            this.logger.error(msg)
                         }
                     }
                 }))
                   
-                this.app.use(bodyParser.urlencoded({ extended: true }));
-                this.app.use(bodyParser.json());
+                this.app.use(bodyParser.urlencoded({ extended: true }))
+                this.app.use(bodyParser.json())
 
                 this.app.use(cors({
                     origin: "*",
                     methods: ["GET", "POST", "PUT", "DELETE"],
                     allowedHeaders: ["Content-Type", "Authorization"]
-                }));
+                }))
 
-                this.app.use(helmet());
-
-                require('../_config/passport')(this.app, environment)
-
-                resolve(require('../routes')(this.app, environment))
+                this.app.use(helmet())
+                this.passport.auth()
+                this.router.init()
+                resolve()
 
             } catch(error) {
                 reject(error)
@@ -80,7 +87,6 @@ export class Server {
 
     initServer(): Promise<any> {
         return new Promise( (resolve, reject) => {
-
             if(environment.authentication.enableHTTPS) {
                 const credentials = {
                     key: fs.readFileSync(environment.authentication.certificate, "utf8"),
@@ -88,12 +94,12 @@ export class Server {
                 }
                 this.server = https.createServer(credentials, this.app)
             } else{
-                this.server = http.createServer(this.app);
+                this.server = http.createServer(this.app)
             }
             this.server.listen( environment.port, () =>  resolve() )
 
             this.app.use(function(err, req, res, next){
-                res.status(400).json(err);
+                res.status(400).json(err)
                 reject(err)
             });
         })
@@ -101,9 +107,9 @@ export class Server {
 
     start(): Promise<Server>{
         return this.initDB()
-                .then( () => this.initConfig()
-                .then( () => this.initServer()
-                .then( () => this )))
+                .then( _ => this.initConfig()
+                .then( _ => this.initServer()
+                .then( _ => this )))
     }
 
     shutdown() {
