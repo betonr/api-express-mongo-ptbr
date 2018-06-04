@@ -10,7 +10,7 @@ export class Logger {
     }
 
     create(): winston.Winston {
-        return new (<any>winston).createLogger({
+        return (<any>winston).createLogger({
             format: (<any>winston).format.combine(
                 (<any>winston).format.timestamp({
                     format: 'YYYY-MM-DD HH:mm:ss'
