@@ -1,5 +1,9 @@
 import * as express from 'express'
 
+import Status from './status'
+import Auth from './auth'
+import User from './user'
+
 export class Router {
 
     app: express.Express
@@ -10,8 +14,8 @@ export class Router {
     }
 
     init() {
-        require('./status')(this.app, this.env);
-        // require('./auth')(this.app, this.env);
-        // require('./user')(this.app, this.env);
+        Status(this.app, this.env)
+        Auth(this.app, this.env)
+        User(this.app, this.env)
     }
 }

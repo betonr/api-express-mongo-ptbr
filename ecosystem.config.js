@@ -2,8 +2,8 @@ module.exports = {
   apps : [{
     name   : "api",
     script : "./dist/main.js",
-    instance: 1,
-    exec_mode: "fork",
+    instance: 0,
+    exec_mode: "cluster",
     watch: true,
     merge_logs: true,
     env: {

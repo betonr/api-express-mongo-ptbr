@@ -1,10 +1,10 @@
-import Joi from 'joi';
-import passport from 'passport';
+import * as joi from 'joi'
+import * as passport from 'passport'
 
 /*
  * Realiza a autenticação via passport (email e senha válidos)
  */
-function authentication(req, res, next) {
+const authentication = function(req, res, next) {
     passport.authenticate('jwt', function (err, user) {
         if (err || !user) {
             res.status(403).send({
@@ -21,7 +21,7 @@ function authentication(req, res, next) {
  * verifica se o usuário logado é administrador (level=3)
  * ou está editando suas proprias informações
  */ 
-function isAdmin(req, res, next) {
+const isAdmin = function(req, res, next) {
     if(req.user.id != req.body.id && req.user.level != 3){
         res.status(403).send({
             errors: [{ 
@@ -34,11 +34,11 @@ function isAdmin(req, res, next) {
     }
 }
 
-module.exports = {
+export default {
     login: {
         body: {
-            email: Joi.string().email().required(),
-            password: Joi.string().regex(/[a-zA-Z0-9]{8,30}/).required().options({
+            email: joi.string().email().required(),
+            password: joi.string().regex(/[a-zA-Z0-9]{8,30}/).required().options({
                 language: {
                   string: {
                     regex: {

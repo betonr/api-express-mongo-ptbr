@@ -1,44 +1,47 @@
-import bcrypt from 'bcrypt-nodejs'
-import jwt from 'jsonwebtoken'
+import * as bcrypt from 'bcrypt-nodejs'
+import * as jwt from 'jsonwebtoken'
 
 import UserModel from './../models/UserModel'
-import logger from './../_config/logger'
-import environment from './../_config/environment'
-
-const _isPassword = (user, password) => {
-    return new Promise((resolve, reject) => {
-        if(bcrypt.compareSync(password, user.password)) resolve();
-        else reject({errors: [{
-                field: ['password'],
-                messages: ['Senha incorreta!']
-            }]
-        })
-    });
-}
-
-const _generateToken = (user) => {
-    const ONE_WEEK = 60 * 60 * 24 * 7;
-    return jwt.sign({user}, environment.authentication.jwtSecret, {
-        expiresIn: ONE_WEEK
-    })
-}
 
 export class AuthController {
+
+    env: any
+    constructor(environment){
+        this.env = environment
+    }
+
+    private generateToken(user): string{
+        const ONE_WEEK = 60 * 60 * 24 * 7;
+        return jwt.sign({user}, this.env.authentication.jwtSecret, {
+            expiresIn: ONE_WEEK
+        })
+    }
     
-    login = async function(infos) {
+    private isPassword(user, password): Promise<any> {
+        return new Promise((resolve, reject) => {
+            if(bcrypt.compareSync(password, user.password)) resolve();
+            else reject({errors: [{
+                    field: ['password'],
+                    messages: ['Senha incorreta!']
+                }]
+            })
+        })
+    }
+
+    login(infos): Promise<Object> {
         return new Promise( (resolve, reject) => {
             let {email, password} = infos
             
             UserModel.findOne({ email, status: true })
                 .then( user => {
                     if(user != null) {
-                        _isPassword(user, password)
+                        this.isPassword(user, password)
                             .catch(error => reject({'errors': error, status: 500}))
                             .then( () => {
                                 user.password = null
                                 resolve({
                                     me: user, 
-                                    token: _generateToken({
+                                    token: this.generateToken({
                                         _id: user._id,
                                         email: user.email,
                                         level: user.level
@@ -61,7 +64,6 @@ export class AuthController {
                     }
                     
                 }).catch( err => {
-                    logger.error(`${error.error.name}: ${error.error.message}`)
                     reject({'errors': err, status: 500})
                 })  
         })

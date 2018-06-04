@@ -1,18 +1,22 @@
-import bcrypt from 'bcrypt-nodejs';
+import * as bcrypt from 'bcrypt-nodejs'
 
 import UserModel from './../models/UserModel'
-import logger from './../_config/logger'
-
-const _hashPassword = function(password){
-    let salt = bcrypt.genSaltSync(9);
-    let hash = bcrypt.hashSync(password, salt);
-
-    return hash;
-}
 
 export class UserController {
+
+    env: any
+    constructor(environment) {
+        this.env = environment
+    }
+
+    private hashPassword(password): IDBFactory{
+        let salt = bcrypt.genSaltSync(9);
+        let hash = bcrypt.hashSync(password, salt);
     
-    users = async function(id){
+        return hash;
+    }
+    
+    users(id): Promise<any>{
         return new Promise( (resolve, reject) => {
             if(id) {
                 UserModel.findOne({_id: id})
@@ -39,7 +43,6 @@ export class UserController {
                         resolve({users})
                     })
                     .catch( (error) => {
-                        logger.error(`${error.name}: ${error.message}`)
                         reject({
                             status: 500, 
                             errors: "Erro de servidor interno" 
@@ -49,11 +52,8 @@ export class UserController {
         })
     }
 
-    register = async function(user){
+    register(user): Promise<any>{
         return new Promise( (resolve, reject) => {
-            let date = new Date();
-            let dateNow = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
-            user = { ...user, registration: dateNow, lastupdate: dateNow};
 
             UserModel.findOne({email: user.email})
                 .then( user => {
@@ -66,14 +66,13 @@ export class UserController {
                     })
                 })
                 .catch( () => {
-                    let password = _hashPassword(user.password)
+                    let password = this.hashPassword(user.password)
                     user = {...user, password}
 
                     let insert = new UserModel(user)
                     insert.save()
                         .then( result => resolve({ 'id': result._id }) )
                         .catch( error => {
-                            logger.error(`${error.name}: ${error.message}`)
                             reject({ 
                                 status: 500,
                                 errors: "Erro de servidor interno" 
@@ -83,7 +82,7 @@ export class UserController {
         })
     }
 
-    update = async function(user){
+    update(user): Promise<any>{
         return new Promise( (resolve, reject) => {
             UserModel.findOne({_id: user.id})
                 .then( () => {
@@ -91,18 +90,13 @@ export class UserController {
                     delete user.id;
 
                     if(user.password) {
-                        let password = _hashPassword(user.password);
+                        let password = this.hashPassword(user.password);
                         user = {...user, password}; 
-                    }      
-
-                    let date = new Date();
-                    let dateNow = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;  
-                    user = {...user, lastupdate: dateNow};
+                    }
 
                     UserModel.findOneAndUpdate({ _id: id }, user)
                         .then( () => resolve({success: true}) )
                         .catch( error => {
-                            logger.error(`${error.name}: ${error.message}`)
                             reject({ 
                                 status: 500,
                                 errors: "Erro de servidor interno" 
@@ -120,14 +114,13 @@ export class UserController {
         })
     }
 
-    delete = async function(id){
+    delete(id): Promise<any>{
         return new Promise( (resolve, reject) => {
             UserModel.findOne({_id: id})
                 .then( () => {
                     UserModel.find({ _id: id }).remove()
                         .then( () => resolve({success: true}) )
                         .catch( error => {
-                            logger.error(`${error.name}: ${error.message}`)
                             reject({ 
                                 status: 500,
                                 errors: "Erro de servidor interno" 

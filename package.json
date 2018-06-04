@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/main.js",
     "build": "tsc",
-    "docs": "apidoc -i routes/doc -o public/doc",
+    "docs": "apidoc -i ts/routes/doc -o public/doc",
     "test": "NODE_ENV=test babel-node __test__/index.js --logHeapUsage"
   },
   "apidoc": {

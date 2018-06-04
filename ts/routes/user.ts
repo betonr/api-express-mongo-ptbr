@@ -1,12 +1,12 @@
-import validate from 'express-validation';
+import * as validate from 'express-validation';
 
 import policiesUser from './../policies/user'
 import policiesAuth from './../policies/auth'
 import { UserController } from './../controllers/UserController'
 
-module.exports = (app, environment) => {
+export default (app, environment): void => {
 
-    const User = new UserController()
+    const User = new UserController(environment)
 
     app.get(environment.pathBase+"/user/:id",
         validate(policiesUser.select),
