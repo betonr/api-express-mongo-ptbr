@@ -19,9 +19,10 @@ export class UserController {
     users(id): Promise<any>{
         return new Promise( (resolve, reject) => {
             if(id) {
-                UserModel.findOne({_id: id})
+                UserModel.findOne({_id: id, profiles: ['user']})
                     .then( user => {
-                        user.password = null;
+                        user = user.toObject()
+                        delete user.password
                         resolve({user})
                     })
                     .catch( () => reject({
@@ -32,12 +33,12 @@ export class UserController {
                         }]
                     })
                 )
-            }
-            else{
-                UserModel.find()
+            } else {
+                UserModel.find({profiles: ['user']})
                     .then( users_full => {
                         let users = users_full.map(user => {
-                            user.password = null;
+                            user = user.toObject()
+                            delete user.password
                             return user;
                         })
                         resolve({users})
@@ -56,28 +57,33 @@ export class UserController {
         return new Promise( (resolve, reject) => {
 
             UserModel.findOne({email: user.email})
-                .then( user => {
-                    reject({
-                        status: 409,
-                        errors: [{ 
-                            field: ['email'],
-                            messages: [`E-mail (${user.email}) já está em uso`]
-                        }]
-                    })
-                })
-                .catch( () => {
-                    let password = this.hashPassword(user.password)
-                    user = {...user, password}
+                .then( userFind => {
+                    if(userFind !== null && userFind.toObject().status == true) {
+                        reject({
+                            status: 409,
+                            errors: [{ 
+                                field: ['email'],
+                                messages: [`O E-mail (${userFind.email})`]
+                            }]
+                        })  
+                    } else {
+                        if(userFind !== null && userFind.toObject().status == false) {
+                            UserModel.remove({ _id: userFind.toObject()._id }).exec()
+                        }
+                    
+                        let password = ''
+                        userFind = {...userFind, password, profiles: ['user']}
 
-                    let insert = new UserModel(user)
-                    insert.save()
-                        .then( result => resolve({ 'id': result._id }) )
-                        .catch( error => {
-                            reject({ 
-                                status: 500,
-                                errors: "Erro de servidor interno" 
+                        let insert = new UserModel(userFind)
+                        insert.save()
+                            .then( result => resolve({ 'id': result._id }) )
+                            .catch( error => {
+                                reject({ 
+                                    status: 500,
+                                    errors: "Erro de servidor interno" 
+                                })
                             })
-                        })
+                    }
                 })
         })
     }
@@ -116,11 +122,11 @@ export class UserController {
 
     delete(id): Promise<any>{
         return new Promise( (resolve, reject) => {
-            UserModel.findOne({_id: id})
-                .then( () => {
-                    UserModel.find({ _id: id }).remove()
-                        .then( () => resolve({success: true}) )
-                        .catch( error => {
+            UserModel.findOne({_id: id, profiles: ['user']})
+                .then( user => {
+                    user.remove()
+                        .then( _ => resolve({success: true}) )
+                        .catch( _ => {
                             reject({ 
                                 status: 500,
                                 errors: "Erro de servidor interno" 
@@ -128,7 +134,7 @@ export class UserController {
                         })
 
                 })
-                .catch( () => reject({
+                .catch( _ => reject({
                     status: 404,
                     errors: [{ 
                         field: ['id'],

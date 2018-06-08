@@ -3,10 +3,8 @@ import * as joi from 'joi'
 export default {
     register: {
         body: {
-            name: joi.string().regex(/[a-zA-Z]/).required(),
-            lastname: joi.string().regex(/[a-zA-Z]/).required(),
+            name: joi.string().required(),
             email: joi.string().email().required(),
-            level: joi.number().integer().required(),
             password: joi.string().regex(/[a-zA-Z0-9]{8,30}/).options({
                 language: {
                   string: {
@@ -15,17 +13,14 @@ export default {
                     }
                   }
                 }
-            }).required(),
-            status: joi.number().integer()
+            })
         }
     },
     update: {
         body: {
             id: joi.required(),
-            name: joi.string().regex(/[a-zA-Z]/),
-            lastname: joi.string().regex(/[a-zA-Z]/),
+            name: joi.string(),
             email: joi.string().email(),
-            level: joi.number().integer(),
             password: joi.string().regex(/[a-zA-Z0-9]{8,30}/).options({
                 language: {
                   string: {

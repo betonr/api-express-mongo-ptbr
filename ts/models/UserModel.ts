@@ -2,21 +2,17 @@ import * as mongoose from 'mongoose'
 
 export interface User extends mongoose.Document {
     name: string,
-    lastname: string,
     email: string,
     password: string,
-    registration: Date,
-    lastupdate: Date,      
-    level: number,
+    profiles: string[],
+    photo: Buffer,
+    createAt: Date,
+    updatedAt: Date,   
     status: boolean
 } 
 
 const UserSchema = new mongoose.Schema({
     name: {
-        type: String,
-        required: true
-    },
-    lastname: {
         type: String,
         required: true
     },
@@ -27,38 +23,41 @@ const UserSchema = new mongoose.Schema({
         required: true
     },
     password: {
+        type: String
+    },      
+    profiles: [{
         type: String,
-        required: true
-    },
-    registration: Date,
-    lastupdate: Date,      
-    level: {
-        type: Number,
         required: true,
-        enum: [1, 2, 3]
+        enum: ['user']
+    }],
+    photo: {
+        type: Buffer,
+        data: Buffer,
+        contentType: String
     },
+    createAt: Date,
+    updatedAt: Date,
     status: { 
         type: Boolean, 
-        default: true 
+        default: false 
     }
 })
 
 const saveMiddleware = function (next){
     const user: User = this
-    user.registration = new Date()
+    user.createAt = new Date()
+    user.updatedAt = new Date()
     next()
 }
 
 const updateMiddleware = function (next){
     const user: User = this
-    if(user.isModified()){
-        next()
-    } else {
-        user.lastupdate = new Date()
-    }
+    user.updatedAt = new Date()
+    next()
 }
+
 
 UserSchema.pre('save', saveMiddleware)
 UserSchema.pre('findOneAndUpdate', updateMiddleware)
 
-export default mongoose.model<User>('users', UserSchema)
+export default mongoose.model<User>('Users', UserSchema, 'users')
